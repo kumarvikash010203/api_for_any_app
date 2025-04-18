@@ -26,6 +26,23 @@ const taskSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  // Assignment fields
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  assignedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  assignmentStatus: {
+    type: String,
+    enum: ['pending', 'accepted', 'rejected', 'completed'],
+    default: 'pending'
+  },
+  assignmentMessage: {
+    type: String
+  },
   createdAt: {
     type: Date,
     default: Date.now

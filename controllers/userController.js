@@ -148,6 +148,48 @@ exports.login = async (req, res) => {
   }
 };
 
+// User search controller
+exports.searchUsers = async (req, res) => {
+  try {
+    const { query } = req.query;
+    
+    if (!query || query.trim() === '') {
+      return res.status(400).json({
+        success: false,
+        message: 'Search query is required'
+      });
+    }
+
+    // Search for users by name, email, or username
+    const users = await User.find({
+      $or: [
+        { name: { $regex: query, $options: 'i' } },
+        { email: { $regex: query, $options: 'i' } },
+        { username: { $regex: query, $options: 'i' } }
+      ],
+      _id: { $ne: req.user.id } // Exclude the current user
+    })
+    .select('_id name email username') // Only return necessary fields
+    .limit(10); // Limit results
+
+    // Format the response
+    const formattedUsers = users.map(user => ({
+      id: user._id,
+      fullName: user.name,
+      email: user.email,
+      username: user.username
+    }));
+
+    return res.status(200).json(formattedUsers);
+  } catch (error) {
+    console.error('Search users error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error, please try again later'
+    });
+  }
+};
+
 // Get user profile controller
 exports.getUserProfile = async (req, res) => {
   try {

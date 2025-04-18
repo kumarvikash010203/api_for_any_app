@@ -5,6 +5,8 @@ const app = express();
 const userRoutes = require('./routes/userRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
+const assignmentRoutes = require('./routes/assignmentRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 const connectDB = require('./config/database');
 
 // Middleware
@@ -20,6 +22,8 @@ connectDB();
 app.use('/api/users', userRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/categories', categoryRoutes);
+app.use('/api/assignments', assignmentRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Home route
 app.get('/', (req, res) => {

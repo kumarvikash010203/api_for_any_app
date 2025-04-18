@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
+const { authMiddleware } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
-// User signup route
+// Public routes
 router.post('/signup', upload.single('profilePicture'), userController.signup);
-
-// Login route (for future use)
 router.post('/login', userController.login);
 
-// Get user profile (for future use)
+// Protected routes
+router.use(authMiddleware);
+router.get('/search', userController.searchUsers);
 router.get('/profile/:id', userController.getUserProfile);
-
-// Update user profile
 router.put('/profile/:id', upload.single('profilePicture'), userController.updateProfile);
 
 module.exports = router; 
