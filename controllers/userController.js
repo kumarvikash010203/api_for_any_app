@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const { signupSchema, updateProfileSchema } = require('../validators/userValidators');
 
+// JWT Secret
+const JWT_SECRET = process.env.JWT_SECRET || 'vikash_sharma_secret_key_for_jwt_auth_tokens';
+
 // User signup controller
 exports.signup = async (req, res) => {
   try {
@@ -52,8 +55,8 @@ exports.signup = async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Get profile picture path if uploaded
-    const profilePicture = req.file ? req.file.path : null;
+    // In serverless environment, we're not handling file uploads for signup
+    const profilePicture = null;
 
     // Create new user
     const newUser = new User({
@@ -123,7 +126,7 @@ exports.login = async (req, res) => {
     const jwt = require('jsonwebtoken');
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.user_role },
-      process.env.JWT_SECRET || 'your_jwt_secret_key_here',
+      JWT_SECRET,
       { expiresIn: '7d' }
     );
 

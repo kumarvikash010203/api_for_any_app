@@ -5,7 +5,7 @@ const { authMiddleware } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
 // Public routes
-router.post('/signup', upload.single('profilePicture'), userController.signup);
+router.post('/signup', userController.signup);
 router.post('/login', userController.login);
 
 // Protected routes
